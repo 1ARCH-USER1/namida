@@ -98,6 +98,9 @@ jobs:
       matrix: ${{ fromJson(needs.setup_matrix.outputs.matrix) }}
 
     steps:
+      - name: Disable submodule init
+        run: git config --global submodule.recurse false
+
       - uses: actions/checkout@v4
         with:
           token: ${{ secrets.PAT }}
@@ -214,6 +217,9 @@ jobs:
     runs-on: ${{ matrix.runner }}
 
     steps:
+      - name: Disable submodule init
+        run: git config --global submodule.recurse false
+
       - uses: actions/checkout@v4
         with:
           token: ${{ secrets.PAT }}
@@ -350,6 +356,9 @@ jobs:
             libepoxy libdrm wayland libxkbcommon glibc binutils \
             mpv wpewebkit dpkg rpm-tools
           pacman -Scc --noconfirm
+
+      - name: Disable submodule init
+        run: git config --global submodule.recurse false
 
       - uses: actions/checkout@v4
         with:
