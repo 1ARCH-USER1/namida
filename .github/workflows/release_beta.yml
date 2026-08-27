@@ -168,9 +168,9 @@ jobs:
 
       - name: Setup dependencies
         run: |
+          git submodule update --init external/language
           flutter clean
           flutter pub upgrade
-          git submodule update --init external/language
 
       - uses: actions/setup-java@v1
         with:
