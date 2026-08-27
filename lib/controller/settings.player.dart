@@ -26,7 +26,7 @@ class _PlayerSettings with SettingsFileWriter {
   final connectWiredResumeThresholdMin = (-1).obs;
   final connectWirelessResumeThresholdMin = (-1).obs;
   final enableGaplessPlayback = false.obs;
-  final enableCrossFade = false.obs;
+  final enableCrossFade = true.obs;
   final crossFadeDurationMS = 500.obs;
   final crossFadeAutoTriggerSeconds = 5.obs;
   final playOnNextPrev = true.obs;
