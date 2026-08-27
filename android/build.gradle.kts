@@ -19,18 +19,28 @@ subprojects {
     val newSubprojectBuildDir: Directory = newBuildDir.dir(project.name)
     project.layout.buildDirectory.value(newSubprojectBuildDir)
 }
-subprojects {
-    project.evaluationDependsOn(":app")
-    afterEvaluate {
-        if (project.plugins.hasPlugin("com.android.library")) {
-            try {
-                val android = project.extensions.getByType(com.android.build.gradle.LibraryExtension::class.java)
-                if (android.namespace == null || android.namespace == "") {
-                    android.namespace = "com.${project.name.replace("-", ".").replace("_", ".")}"
+
+gradle.projectsLoaded {
+    rootProject.allprojects {
+        if (project.name != "app") {
+            project.plugins.whenPluginAdded {
+                if (it.javaClass.name.startsWith("com.android.build.gradle.LibraryPlugin")) {
+                    project.afterEvaluate {
+                        try {
+                            val android = project.extensions.getByType(com.android.build.gradle.LibraryExtension::class.java)
+                            if (android.namespace.isNullOrEmpty()) {
+                                android.namespace = "com.${project.name.replace("-", ".").replace("_", ".")}"
+                            }
+                        } catch (_: Exception) {}
+                    }
                 }
-            } catch (_: Exception) {}
+            }
         }
     }
+}
+
+subprojects {
+    project.evaluationDependsOn(":app")
 }
 
 tasks.register<Delete>("clean") {
