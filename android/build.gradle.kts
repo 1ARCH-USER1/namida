@@ -21,6 +21,16 @@ subprojects {
 }
 subprojects {
     project.evaluationDependsOn(":app")
+    afterEvaluate {
+        if (project.plugins.hasPlugin("com.android.library")) {
+            try {
+                val android = project.extensions.getByType(com.android.build.gradle.LibraryExtension::class.java)
+                if (android.namespace == null || android.namespace == "") {
+                    android.namespace = "com.${project.name.replace("-", ".").replace("_", ".")}"
+                }
+            } catch (_: Exception) {}
+        }
+    }
 }
 
 tasks.register<Delete>("clean") {
