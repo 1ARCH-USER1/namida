@@ -98,14 +98,17 @@ jobs:
       matrix: ${{ fromJson(needs.setup_matrix.outputs.matrix) }}
 
     steps:
-      - name: Disable submodule init
-        run: git config --global submodule.recurse false
-
       - uses: actions/checkout@v4
         with:
           token: ${{ secrets.PAT }}
-          submodules: false
           fetch-depth: 0 # all history for changelog
+
+      - name: Remove ffmpeg_build submodule remnants
+        run: |
+          git submodule deinit -f external/ffmpeg_build 2>/dev/null || true
+          git rm -f external/ffmpeg_build 2>/dev/null || true
+          rm -rf .git/modules/external/ffmpeg_build 2>/dev/null || true
+          rm -rf external/ffmpeg_build 2>/dev/null || true
 
       - uses: subosito/flutter-action@v2
         with:
@@ -217,13 +220,16 @@ jobs:
     runs-on: ${{ matrix.runner }}
 
     steps:
-      - name: Disable submodule init
-        run: git config --global submodule.recurse false
-
       - uses: actions/checkout@v4
         with:
           token: ${{ secrets.PAT }}
-          submodules: false
+
+      - name: Remove ffmpeg_build submodule remnants
+        run: |
+          git submodule deinit -f external/ffmpeg_build 2>/dev/null || true
+          git rm -f external/ffmpeg_build 2>/dev/null || true
+          rm -rf .git/modules/external/ffmpeg_build 2>/dev/null || true
+          rm -rf external/ffmpeg_build 2>/dev/null || true
 
       - name: Install Flutter (x64)
         if: matrix.arch == 'x64'
@@ -357,13 +363,16 @@ jobs:
             mpv wpewebkit dpkg rpm-tools
           pacman -Scc --noconfirm
 
-      - name: Disable submodule init
-        run: git config --global submodule.recurse false
-
       - uses: actions/checkout@v4
         with:
           token: ${{ secrets.PAT }}
-          submodules: false
+
+      - name: Remove ffmpeg_build submodule remnants
+        run: |
+          git submodule deinit -f external/ffmpeg_build 2>/dev/null || true
+          git rm -f external/ffmpeg_build 2>/dev/null || true
+          rm -rf .git/modules/external/ffmpeg_build 2>/dev/null || true
+          rm -rf external/ffmpeg_build 2>/dev/null || true
 
       - name: Fix git ownership
         run: git config --global --add safe.directory /__w/namida/namida
